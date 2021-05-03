@@ -1,4 +1,4 @@
-title Boolean Bloom 0.37
+title Boolean Bloom 1.42
 author vexorian
 homepage vexorian.com
 (require_player_movement)
@@ -6,6 +6,8 @@ again_interval 0.1
 run_rules_on_level_start
 (debug
 verbose_logging)
+
+enable_level_select
 
 ========
 OBJECTS
@@ -290,6 +292,103 @@ WallLeftBorder
 0....
 0....
 
+U0
+#A4AF95 #B1BBA1
+.....
+.....
+.....
+.001.
+.0.0.
+
+D0
+#A4AF95 #B1BBA1
+.0.0.
+.1.0.
+.000.
+.....
+.....
+
+U1
+#A4AF95 #B1BBA1
+.....
+.....
+.....
+..0..
+.00..
+
+D1
+#A4AF95 #B1BBA1
+..0..
+..0..
+.000.
+.....
+.....
+
+U2
+#A4AF95 #B1BBA1
+.....
+.....
+.....
+.001.
+...0.
+
+D2
+#A4AF95 #B1BBA1
+.000.
+.1...
+.000.
+.....
+.....
+
+D3
+#A4AF95 #B1BBA1
+.000.
+...0.
+.000.
+.....
+.....
+
+U4
+#A4AF95 #B1BBA1
+.....
+.....
+.....
+.0.1.
+.0.0.
+
+D4
+#A4AF95 #B1BBA1
+.000.
+...0.
+...0.
+.....
+.....
+
+U5
+#A4AF95 #B1BBA1
+.....
+.....
+.....
+.001.
+.0...
+
+D6
+#A4AF95 #B1BBA1
+.000.
+.1.0.
+.000.
+.....
+.....
+
+
+D7
+#A4AF95 #B1BBA1
+...0.
+...0.
+...0.
+.....
+.....
+
 
 =======
 LEGEND
@@ -311,6 +410,21 @@ v = PlantHeadDown and Background
 
 @ = Goal and Background
 % = Goal and Block and Background
+
+⨅ = u0 and Background
+▟ = u1 and Background
+┐ = u2 and Background
+॥ = u4 and Background
+┏ = u5 and Background
+
+
+⨆ = d0 and Background
+┻ = d1 and Background
+ⵎ = d2 and Background
+⊃ = d3 and Background
+┓ = d4 and Background
+⸋ = d6 and Background
+┃ = d7 and Background
 
 Player = PlayerFront or PlayerRight or PlayerLeft or PlayerFrontSkip1 or PlayerFrontSkip0
 WithCollision = Player or Wall or Block or PlantHeadRight or PlantHorizontal or PlantVertical or PlantHeadRightOff or PlantHeadLeft or PlantHeadLeftOff or PlantHeadUp or PlantHeadUpOff or PlantHeadDown or PlantHeadDownOff
@@ -341,13 +455,17 @@ COLLISIONLAYERS
 
 Background
 Background2
+u0,d0,u1,u2,d1,d2,d2,d3,u4,d4,u5,d6,d7
 Button
 Door, NegaDoor, Trap, NegaTrap
 WithCollisionOrClosed 
 Goal
+
 GoalTic0
 GoalTic1
 OpenMarker
+
+
 WallLeftBorder
 WallBottomBorder
 WallRightBorder
@@ -435,12 +553,21 @@ right [ wall | no wall ] -> [ wall WallRightBorder | ]
 left [ wall | no wall ] -> [ wall WallLeftBorder | ]
 up [ wall | no wall ] -> [ wall WallTopBorder | ]
 
-( skip )
+up       [ Background |      ] -> [ action Background  | ]
+[ stationary Background Wall ] -> [ Wall Background WallTopBorder ]
+[ action Background ] -> [ Background ]
 
-[ action Player no PlayerFrontSkip0  no PlayerFrontSkip1 ] -> [ PlayerFrontSkip0 ] sfx4
+down     [ Background |      ] -> [ action Background  | ]
+[ stationary Background Wall ] -> [ Wall Background WallBottomBorder ]
+[ action Background ] -> [ Background ]
 
-[ action PlayerFrontSkip0  ] -> [ PlayerFrontSkip1 ] sfx4
-[ action PlayerFrontSkip1  ] -> win
+left     [ Background |      ] -> [ action Background  | ]
+[ stationary Background Wall ] -> [ Wall Background WallLeftBorder ]
+[ action Background ] -> [ Background ]
+
+right    [ Background |      ] -> [ action Background  | ]
+[ stationary Background Wall ] -> [ Wall Background WallRightBorder ]
+[ action Background ] -> [ Background ]
 
 
 ==============
@@ -472,62 +599,54 @@ LEVELS
 Message Welcome Gardener
 Message Please make sure all flowers stay in the assigned locations.
 Message Use direction keys to move, press U to undo and R to restart.
-Message Press X three times in a row to skip the level.
+Message Press escape to return to level select if you want to skip a level.
 
-Message 1
-::::::::::::::
-:############:
-:#..........#:
-:#>...oo.@..#:
-:#....oo....#:
-:#..........#:
-:#>@P.o.....#:
-:#..........#:
-:############:
-::::::::::::::
+level_select_point (01)
+############
+#..........#
+#>...oo.@..#
+#....oo....#
+#..........#
+#>@P.o...⨅▟#
+#........⨆┻#
+############
 
-Message 2
+level_select_point (02)
 
-::::::::::::::::::::::
-:###################::
-:########.........##::
-:#....###....P.#..##::
-:#>...D.D@.#.ooo..##::
-:#....###....#x#..##::
-:########.........##::
-:###################::
-::::::::::::::::::::::
+##################
+########.........#
+#....###....P.#..#
+#>...D.D@.#.ooo..#
+#....###....#x#⨅┐#
+########.......⨆ⵎ#
+##################
 
 
-Message 3
-::::::::::::::
-:############:
-:#......v...#:
-:#..........#:
-:#..#@..o..<#:
-:#..........#:
-:#......P.@.#:
-:#...###....#:
-:#...vv#.#^.#:
-:#.#.ooo.####:
-:#...@@.#####:
-:############:
-::::::::::::::
+level_select_point (03)
+############
+#⨅┐....v...#
+#⨆⊃........#
+#..#@..o..<#
+#..........#
+#......P.@.#
+#...###....#
+#...vv#.#^.#
+#.#.ooo.####
+#...@@.#####
+############
 
+level_select_point (04)
+#################
+########...#..v.#
+########...T..o.#
+##.........#.o@##
+##.........#...##
+###.####.P.######
+#>..oo.D......@.#
+###..#.D....#.⨅॥#
+####...#..X.#.⨆┓#
+#################
 
-Message 4
-:::::::::::::::::::
-:#################:
-:########...#..v.#:
-:########...T..o.#:
-:##.........#.o@##:
-:##.........#...##:
-:###.####.P.######:
-:#>..oo.D......@.#:
-:###..#.D....#...#:
-:####...#..X.#...#:
-:#################:
-:::::::::::::::::::
 
 
 
@@ -542,66 +661,58 @@ Message 4
 :##################:
 ::::::::::::::::::::)
 
-Message 5
-::::::::::::::::::::
-:##################:
-:########.#########:
-:#>......o@.......#:
-:########.##.P....#:
-:#.....@......o..<#:
-:#>.@@...oo..<##..#:
-:#............##..#:
-:#............##@.#:
-:###############^##:
-:##################:
-::::::::::::::::::::
+level_select_point (05)
+##################
+########.#########
+#>......o@.......#
+########.##.P....#
+#.....@......o..<#
+#>.@@...oo..<##..#
+#⨅┏..........##..#
+#⨆⊃..........##@.#
+###############^##
+##################
 
 
-Message 6
-::::::::::::::::::::
-:##################:
-:#..........##..@##:
-:#.....#.#..v....##:
-:#>..o##....o..#.##:
-:#.....##....##.o##:
-:#......o.P.......#:
-:##X#...........^##:
-:##X#...^..#D######:
-:##X###.#.##.######:
-:#####..o..#.######:
-:#######^###@######:
-:##################:
-::::::::::::::::::::
+level_select_point (06)
+##################
+#⨅┏........##..@##
+#⨆⸋...#.#..v....##
+#>..o##....o..#.##
+#.....##....##.o##
+#......o.P.......#
+##X#...........^##
+##X#...^..#D######
+##X###.#.##.######
+#####..o..#.######
+#######^###@######
+##################
 
 
-Message 7
-:::::::::::::::::
-:###############:
-:#.........v...#:
-:#......P......#:
-:#.%<#.........#:
-:#.%<#.....o..<#:
-:##.##..o....@.#:
-:##.##>.o.@....#:
-:##.##@.o<#....#:
-:##@##....#..^.#:
-:##^####.#######:
-:###############:
-:::::::::::::::::
+level_select_point (07)
+###############
+#.........v.⨅┐#
+#......P....⨆┃#
+#.%<#.........#
+#.%<#.....o..<#
+##.##..o....@.#
+##.##>.o.@....#
+##.##@.o<#....#
+##@##....#..^.#
+##^####.#######
+###############
 
 
-Message 8
-:::::::::::::::::::::::::
-:#######################:
-:###...o...#############:
-:#....#.#.##############:
-:#>.o@#^#..v.#.....#.o.#:
-:#....###..o.#.P...#...#:
-:###>.D.D@...T.....D...#:
-:#....###..o.T.....#.@.#:
-:########..@.#.#x#.#.^.#:
-:#######################:
-:::::::::::::::::::::::::
+level_select_point (08)
+#######################
+###...o...#############
+#....#.#.##############
+#>.o@#^#..v.#...⨅⨅#.o.#
+#....###..o.#.P.⨆⸋#...#
+###>.D.D@...T.....D...#
+#....###..o.T.....#.@.#
+########..@.#.#x#.#.^.#
+#######################
 
 
 (
@@ -622,18 +733,16 @@ Message 8
 )
 
 
-Message 9
-::::::::::::::::::::::
-:####################:
-:#T.....@........D.<#:
-:#X#...@.........D.<#:
-:#T...@..........D.<#:
-:###>..oo....@..<####:
-:#>...o..o......<####:
-:#>..o..@.o.....<####:
-:#>.o..P...o....<####:
-:####################:
-::::::::::::::::::::::
+level_select_point (09)
+####################
+#T.....@........D.<#
+#X#...@.......⨅⨅D.<#
+#T...@........⨆⊃D.<#
+###>..oo....@..<####
+#>...o..o......<####
+#>..o..@.o.....<####
+#>.o..P...o....<####
+####################
 
 Message Well done!
 
