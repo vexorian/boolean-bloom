@@ -2,7 +2,13 @@
 
 Puzzle script game, push plants to their right length
 
-![screenshot](https://raw.githubusercontent.com/vexorian/boolean-bloom/main/Selecci%C3%B3n_999(414).png)
+## Preview
+
+![screenshot](https://raw.githubusercontent.com/vexorian/boolean-bloom/main/newbooleanbloom.gif)
+
+## Requirements
+
+* Pancelor's puzzlescript fork: https://pancelor.com/PuzzleScript/editor.html
 
 ## Play officially at itch.io
 
